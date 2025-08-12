@@ -31,7 +31,6 @@ tests/
 .env
 .env.local
 project-structure.md
-server.js
 
 # Coverage directory used by tools like istanbul
 coverage

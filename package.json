@@ -1,16 +1,22 @@
 {
   "name": "expense-tracker",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "build": "echo 'No build step required for static files'"
   },
-  "keywords": [],
+  "keywords": [
+    "expense",
+    "tracker",
+    "budget"
+  ],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
+    "express": "^4.18.2",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.60.0",
@@ -20,5 +26,5 @@
     "doc": "docs",
     "test": "tests"
   },
-  "description": ""
+  "description": "Expense Tracker Application"
 }
