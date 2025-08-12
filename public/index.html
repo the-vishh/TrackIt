@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrackIt- AI Expense Tracker</title>
+    <link rel="stylesheet" href="trackit.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#667eea">
+    <meta name="description" content="AI-powered expense tracker that understands your spending patterns and helps optimize your financial health.">
+</head>
+<body>
+    <div id="app" class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <h1 class="logo">💰TrackIt</h1>
+                <p class="tagline">Your AI-powered expense companion</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-secondary" id="settingsBtn">⚙️ Settings</button>
+                <button class="btn-secondary" id="profileBtn">👤 Profile</button>
+            </div>
+        </header>
+
+        <!-- Statistics Dashboard -->
+        <section class="stats-section">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">💳</div>
+                    <div class="stat-value" id="totalSpent">$0.00</div>
+                    <div class="stat-label">Total Spent</div>
+                    <div class="stat-change">+12% from last week</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📅</div>
+                    <div class="stat-value" id="todaySpent">$0.00</div>
+                    <div class="stat-label">Today</div>
+                    <div class="stat-change">3 transactions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">📊</div>
+                    <div class="stat-value" id="avgDaily">$0.00</div>
+                    <div class="stat-label">Daily Average</div>
+                    <div class="stat-change">Based on 30 days</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎯</div>
+                    <div class="stat-value" id="budgetLeft">$0.00</div>
+                    <div class="stat-label">Budget Remaining</div>
+                    <div class="stat-change" id="budgetProgress">67% used</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content Grid -->
+        <main class="main-content">
+            <!-- AI Expense Entry -->
+            <section class="card expense-entry">
+                <div class="card-header">
+                    <h2>🤖 Tell me about your expense</h2>
+                    <span class="ai-status" id="aiStatus">Ready</span>
+                </div>
+                <div class="ai-input-container">
+                    <textarea
+                        id="aiInput"
+                        class="ai-input"
+                        placeholder="Just spent $15 on coffee with Sarah at that new place downtown. Feeling excited about the new project we discussed!"
+                        rows="4"
+                    ></textarea>
+                    <div class="input-actions">
+                        <button class="btn-secondary" id="voiceBtn">🎤 Voice</button>
+                        <button class="btn-secondary" id="receiptBtn">📷 Receipt</button>
+                        <button class="btn-primary" id="processBtn">✨ Process with AI</button>
+                    </div>
+                </div>
+
+                <div class="ai-suggestions" id="aiSuggestions">
+                    <div class="suggestion-item">
+                        <strong>💡 AI Insight:</strong> Based on your recent coffee purchases and mood patterns, you tend to spend 23% more on beverages when excited. Consider setting a weekly coffee budget!
+                    </div>
+                </div>
+
+                <!-- Quick Add Buttons -->
+                <div class="quick-add-section">
+                    <h3>Quick Add</h3>
+                    <div class="quick-add-grid">
+                        <button class="quick-add-btn" data-category="coffee">☕ Coffee</button>
+                        <button class="quick-add-btn" data-category="food">🍽️ Food</button>
+                        <button class="quick-add-btn" data-category="gas">⛽ Gas</button>
+                        <button class="quick-add-btn" data-category="shopping">🛍️ Shopping</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Financial Growth Tree -->
+            <section class="card growth-tree">
+                <div class="card-header">
+                    <h2>🌳 Financial Growth Tree</h2>
+                    <div class="tree-health" id="treeHealth">78%</div>
+                </div>
+                <div class="tree-visual">
+                    <div class="tree-container">
+                        <div class="tree-emoji" id="treeEmoji">🌳</div>
+                        <div class="tree-leaves" id="treeLeaves"></div>
+                    </div>
+                    <div class="tree-stats">
+                        <div class="tree-stat">
+                            <span class="tree-stat-label">Growth Level</span>
+                            <span class="tree-stat-value" id="growthLevel">7</span>
+                        </div>
+                        <div class="tree-stat">
+                            <span class="tree-stat-label">Savings Streak</span>
+                            <span class="tree-stat-value" id="savingsStreak">12 days</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="treeProgress" style="width: 78%"></div>
+                </div>
+            </section>
+
+            <!-- Spending Breakdown Chart -->
+            <section class="card chart-section">
+                <div class="card-header">
+                    <h2>📊 Spending Breakdown</h2>
+                    <div class="chart-controls">
+                        <button class="chart-period active" data-period="week">Week</button>
+                        <button class="chart-period" data-period="month">Month</button>
+                        <button class="chart-period" data-period="year">Year</button>
+                    </div>
+                </div>
+                <div class="chart-container">
+                    <canvas id="spendingChart"></canvas>
+                </div>
+                <div class="chart-legend" id="chartLegend"></div>
+            </section>
+
+            <!-- Recent Expenses -->
+            <section class="card expenses-list">
+                <div class="card-header">
+                    <h2>📝 Recent Expenses</h2>
+                    <div class="list-controls">
+                        <input type="text" id="searchExpenses" placeholder="Search expenses..." class="search-input">
+                        <select id="filterCategory" class="filter-select">
+                            <option value="">All Categories</option>
+                            <option value="food">Food & Drink</option>
+                            <option value="transport">Transportation</option>
+                            <option value="shopping">Shopping</option>
+                            <option value="entertainment">Entertainment</option>
+                            <option value="bills">Bills</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="expense-list" id="expenseList">
+                    <!-- Expenses will be populated by JavaScript -->
+                </div>
+                <div class="list-actions">
+                    <button class="btn-secondary" id="loadMoreBtn">Load More</button>
+                    <button class="btn-secondary" id="exportBtn">📤 Export</button>
+                </div>
+            </section>
+
+            <!-- Insights Panel -->
+            <section class="card insights-panel">
+                <div class="card-header">
+                    <h2>🧠 AI Insights</h2>
+                    <div class="insights-refresh">
+                        <button class="btn-icon" id="refreshInsights">🔄</button>
+                    </div>
+                </div>
+                <div class="insights-content" id="insightsContent">
+                    <div class="insight-item">
+                        <div class="insight-icon">📈</div>
+                        <div class="insight-text">
+                            <strong>Spending Trend:</strong> You're spending 15% less this week compared to last week. Great progress!
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">⏰</div>
+                        <div class="insight-text">
+                            <strong>Peak Spending Time:</strong> Most of your expenses occur between 2-4 PM on weekdays.
+                        </div>
+                    </div>
+                    <div class="insight-item">
+                        <div class="insight-icon">📍</div>
+                        <div class="insight-text">
+                            <strong>Location Alert:</strong> You spend 40% more when shopping at malls vs local stores.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Goals & Challenges -->
+            <section class="card goals-section">
+                <div class="card-header">
+                    <h2>🎯 Goals & Challenges</h2>
+                    <button class="btn-secondary" id="addGoalBtn">+ Add Goal</button>
+                </div>
+                <div class="goals-list" id="goalsList">
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-title">Save $500 this month</div>
+                            <div class="goal-progress">$320 / $500</div>
+                        </div>
+                        <div class="goal-chart">
+                            <div class="goal-progress-bar">
+                                <div class="goal-progress-fill" style="width: 64%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="goal-item">
+                        <div class="goal-info">
+                            <div class="goal-title">Coffee budget: $30/week</div>
+                            <div class="goal-progress">$18 / $30</div>
+                        </div>
+                        <div class="goal-chart">
+                            <div class="goal-progress-bar">
+                                <div class="goal-progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Floating Action Button -->
+        <button class="floating-add" id="floatingAdd" title="Add Expense">
+            <span class="fab-icon">+</span>
+        </button>
+
+        <!-- Location Alert -->
+        <div class="location-alert" id="locationAlert" style="display: none;">
+            <div class="alert-content">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-text">
+                    <strong>High Spending Area Detected!</strong>
+                    <p>You're entering a shopping district. Average spending here: $85</p>
+                </div>
+                <button class="alert-dismiss" id="dismissAlert">×</button>
+            </div>
+        </div>
+
+        <!-- Loading Overlay -->
+        <div class="loading-overlay" id="loadingOverlay" style="display: none;">
+            <div class="loading-spinner"></div>
+            <div class="loading-text">Processing with AI...</div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="trackit.js"></script>
+</body>
+</html>
