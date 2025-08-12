@@ -36,7 +36,7 @@ A modern, intelligent expense tracking web application built with HTML, CSS, and
 
 ## 🚀 Live Demo
 
-[**Try TrackIt Now**](https://track-it-ashen-eight.vercel.app/)
+🖥️ **(Vercel)**: [https://track-it-ashen-eight.vercel.app/](https://track-it-ashen-eight.vercel.app/)
 
 ## 🛠️ Tech Stack
 
