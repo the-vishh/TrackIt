@@ -36,7 +36,9 @@ A modern, intelligent expense tracking web application built with HTML, CSS, and
 
 ## 🚀 Live Demo
 
-🖥️ **(Vercel)**: [https://track-it-ashen-eight.vercel.app/](https://track-it-ashen-eight.vercel.app/)
+🖥️ **Frontend (Vercel)**: [https://track-it-ashen-eight.vercel.app/](https://track-it-ashen-eight.vercel.app/)
+
+🌐 **Backend (Render)**: [https://trackit-yfpb.onrender.com](https://trackit-yfpb.onrender.com)
 
 ## 🛠️ Tech Stack
 
@@ -56,6 +58,7 @@ trackit/
 │   ├── index.html             # Main HTML file
 │   ├── trackit.css
 │   ├── trackit.js
+├── server.js
 ├── .gitignore
 ├── LICENSE
 ├── package.json               # Dependencies
