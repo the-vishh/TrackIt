@@ -1,4 +1,4 @@
-# ControlSpending - Smart Expense Tracker
+# TrackIt - Smart Expense Tracker
 
 A comprehensive expense tracking application with AI-powered insights, real-time analytics, and gamification features.
 
@@ -62,7 +62,7 @@ Before you begin, make sure you have the following installed:
 
 ```bash
 # Clone the repository
-git clone <your-repo-url>
+git clone <https://github.com/the-vishh/TrackIt>
 cd expense-tracker
 
 # Install all dependencies (root, client, server, and AI service)
