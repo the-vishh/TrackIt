@@ -1,0 +1,178 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String   @id @default(cuid())
+  email       String   @unique
+  name        String
+  password    String
+  avatar      String?
+  preferences Json     @default("{}")
+  level       Int      @default(1)
+  experience  Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  expenses       Expense[]
+  budgets        Budget[]
+  categories     Category[]
+  achievements   Achievement[]
+  notifications  Notification[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String   @id @default(cuid())
+  name      String
+  icon      String
+  color     String
+  parentId  String?
+  budget    Float?
+  spent     Float    @default(0)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user      User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  parent    Category?  @relation("CategoryHierarchy", fields: [parentId], references: [id])
+  children  Category[] @relation("CategoryHierarchy")
+  expenses  Expense[]
+
+  @@map("categories")
+}
+
+model Expense {
+  id               String   @id @default(cuid())
+  amount           Float
+  currency         String   @default("USD")
+  description      String
+  date             DateTime
+  location         Json?
+  receipt          String?
+  tags             String[]
+  isRecurring      Boolean  @default(false)
+  recurringPattern Json?
+  aiInsights       Json?
+  userId           String
+  categoryId       String
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  // Relations
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id])
+
+  @@map("expenses")
+}
+
+model Budget {
+  id        String   @id @default(cuid())
+  name      String
+  amount    Float
+  currency  String   @default("USD")
+  period    String   // daily, weekly, monthly, yearly
+  categories String[]
+  startDate DateTime
+  endDate   DateTime?
+  spent     Float    @default(0)
+  remaining Float
+  isActive  Boolean  @default(true)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("budgets")
+}
+
+model Achievement {
+  id          String    @id @default(cuid())
+  name        String
+  description String
+  icon        String
+  unlockedAt  DateTime?
+  progress    Int       @default(0)
+  maxProgress Int
+  userId      String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("achievements")
+}
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String   // budget_alert, location_alert, achievement, etc.
+  title     String
+  message   String
+  data      Json?
+  isRead    Boolean  @default(false)
+  userId    String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("notifications")
+}
+
+model SpendingPattern {
+  id        String   @id @default(cuid())
+  userId    String
+  category  String
+  amount    Float
+  frequency String   // daily, weekly, monthly
+  date      DateTime
+  createdAt DateTime @default(now())
+
+  @@map("spending_patterns")
+}
+
+model LocationInsight {
+  id        String   @id @default(cuid())
+  userId    String
+  latitude  Float
+  longitude Float
+  address   String?
+  placeName String?
+  city      String?
+  country   String?
+  totalSpent Float
+  visitCount Int
+  averageSpend Float
+  categoryBreakdown Json
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("location_insights")
+}
+
+model SpendingPrediction {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  predictedAmount Float
+  confidence Float
+  factors   String[]
+  createdAt DateTime @default(now())
+
+  @@map("spending_predictions")
+}
